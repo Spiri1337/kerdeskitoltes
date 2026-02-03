@@ -17,8 +17,8 @@ body {
 .step.active { display: block; }
 
 button {
-    padding: 12px 28px;
-    font-size: 20px;
+    padding: 12px 26px;
+    font-size: 18px;
     margin: 10px;
     border: none;
     border-radius: 8px;
@@ -27,14 +27,9 @@ button {
     color: white;
 }
 
-#feedback {
-    margin-top: 15px;
-    font-size: 18px;
-    color: #ff4081;
-    opacity: 0;
-    transition: opacity 0.25s;
+.secondary {
+    background-color: #bbb;
 }
-#feedback.show { opacity: 1; }
 
 #buttons {
     position: relative;
@@ -43,6 +38,11 @@ button {
 
 #no {
     position: absolute;
+}
+
+#sadText {
+    min-height: 24px;
+    margin-top: 10px;
 }
 
 img {
@@ -56,44 +56,57 @@ img {
 
 <body>
 
-<!-- KÉRDÉSEK -->
+<!-- STEP 1 -->
 <div id="step1" class="step active">
     <h1>Készen állsz egy kérdésre? 💭</h1>
-    <button onclick="nextStep(1)">Igen</button>
+    <button onclick="next(1)">Igen</button>
+    <button class="secondary" onclick="alert('Na gyerünk 😉')">Nem</button>
 </div>
 
+<!-- STEP 2 -->
 <div id="step2" class="step">
-    <h1>Szeretsz igent mondani jó dolgokra? 😉</h1>
-    <button onclick="nextStep(2)">Oké</button>
+    <h1>Biztos, hogy készen állsz? 🤔</h1>
+    <button onclick="next(2)">Igen</button>
+    <button class="secondary" onclick="alert('Adj neki egy esélyt 😌')">Nem</button>
 </div>
 
+<!-- STEP 3 -->
 <div id="step3" class="step">
     <h1>Most inkább kíváncsi vagy, mint bizonytalan? 😏</h1>
-    <button onclick="nextStep(3)">Jöhet</button>
+    <button onclick="next(3)">Kíváncsi vagyok</button>
+    <button class="secondary" onclick="alert('A kíváncsiság jobb 😉')">Bizonytalan</button>
 </div>
 
+<!-- STEP 4 -->
 <div id="step4" class="step">
     <h1>Szereted a kis meglepetéseket? 🎁</h1>
-    <button onclick="nextStep(4)">Na jó 😌</button>
+    <button onclick="next(4)">Igen</button>
+    <button class="secondary" onclick="alert('Pedig ez aranyos 😄')">Nem</button>
 </div>
 
+<!-- STEP 5 -->
 <div id="step5" class="step">
     <h1>Ha most mosolyogsz, az már majdnem igen 😌</h1>
-    <button onclick="nextStep(5, true)">Úgyis igen 😏</button>
+    <button onclick="next(5)">Mosolygok 😌</button>
+    <button class="secondary" onclick="alert('Látom ám 😏')">Nem mosolygok</button>
 </div>
 
+<!-- STEP 6 -->
 <div id="step6" class="step">
     <h1>Készen állsz a nagy kérdésre? 😏</h1>
-    <button onclick="finalPause()">Igen</button>
+    <button onclick="finalPause()">Jöhet</button>
+    <button class="secondary" onclick="alert('Csak egy pillanat 😌')">Még nem</button>
 </div>
 
 <!-- FŐ KÉRDÉS -->
 <div id="main" class="step">
     <h1>Leszel a Valentinom? 💕</h1>
+
     <div id="buttons">
-        <button onclick="showFinal()">Yes 💖</button>
+        <button onclick="showFinal()">Igen 💖</button>
         <button id="no">Nem</button>
     </div>
+
     <p id="sadText"></p>
 </div>
 
@@ -105,27 +118,10 @@ img {
     <img src="https://i.imgur.com/hJ2g6If.jpeg">
 </div>
 
-<div id="feedback"></div>
-
 <script>
-/* IGEN visszajelzés */
-const feedbacks = ["oké 😌", "jó 😏", "ezt szeretem 💖", "haladunk 😉"];
-let f = 0;
-
-function nextStep(n, slow = false) {
-    showFeedback();
+function next(n) {
     document.getElementById("step" + n).classList.remove("active");
-    setTimeout(() => {
-        document.getElementById("step" + (n + 1)).classList.add("active");
-    }, slow ? 400 : 150);
-}
-
-function showFeedback() {
-    const fb = document.getElementById("feedback");
-    fb.innerText = feedbacks[Math.min(f, feedbacks.length - 1)];
-    f++;
-    fb.classList.add("show");
-    setTimeout(() => fb.classList.remove("show"), 500);
+    document.getElementById("step" + (n + 1)).classList.add("active");
 }
 
 function finalPause() {
@@ -156,7 +152,12 @@ function moveNo() {
     no.style.left = Math.random() * maxX + "px";
     no.style.top = Math.random() * maxY + "px";
 
-    const msgs = ["Hopp 😅", "Ez nem ilyen könnyű 😏", "Próbálkozol? 😂", "Én várok 💖"];
+    const msgs = [
+        "Hopp 😅",
+        "Ez nem ilyen könnyű 😏",
+        "Próbálkozol? 😂",
+        "Én várok 💖"
+    ];
     sadText.innerText = msgs[Math.min(attempts, msgs.length - 1)];
 }
 </script>
