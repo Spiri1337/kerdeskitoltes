@@ -40,20 +40,61 @@ button {
 </style>
 </head>
 
-<body>
+<body onload="playMusic()">
 
 <h1>Leszel a Valentinom? 💕</h1>
 
 <div id="buttons">
     <button id="yesBtn" onclick="yes()">Yes</button>
-    <button id="no" onclick="noClick()">Nem</button>
+    <button id="no">Nem</button>
 </div>
 
 <p id="sadText"></p>
 
 <img id="noImage" src="" style="display:none">
 
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8b2b6b7f3.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+const no = document.getElementById("no");
+const container = document.getElementById("buttons");
+const text = document.getElementById("sadText");
+const img = document.getElementById("noImage");
+
+let attempts = 0;
+
+// Funkció a "Nem" gombhoz
+function moveNoButton() {
+    attempts++;
+
+    const maxX = container.offsetWidth - no.offsetWidth;
+    const maxY = container.offsetHeight - no.offsetHeight;
+
+    no.style.left = Math.random() * maxX + "px";
+    no.style.top = Math.random() * maxY + "px";
+
+    if (attempts === 1) {
+        text.innerText = "Tényleg szomorú leszek, ha nemre nyomsz… 😔";
+        img.src = "https://i.imgur.com/8OtYw8D.jpeg";
+        img.style.display = "block";
+    } else if (attempts === 3) {
+        text.innerText = "Még mindig a Nem-et próbálod? 😏";
+    } else if (attempts === 6) {
+        text.innerText = "Tényleg ellenállsz? 😄";
+    } else if (attempts === 10) {
+        text.innerText = "Én még mindig itt várok... 💖";
+    } else if (attempts >= 15) {
+        text.innerText = "Ez már kitartás 😂 De nem fog sikerülni!";
+    }
+}
+
+// Események a "Nem" gombhoz
+no.addEventListener("mouseover", moveNoButton);
+no.addEventListener("touchstart", moveNoButton);
+
+// Funkció a "Yes" gombhoz
 function yes() {
     document.body.innerHTML = `
         <h1>Ez az 😏💖</h1>
@@ -62,25 +103,12 @@ function yes() {
     `;
 }
 
-function noClick() {
-    const no = document.getElementById("no");
-    const text = document.getElementById("sadText");
-    const img = document.getElementById("noImage");
-    const container = document.getElementById("buttons");
-
-    text.innerText = "Tényleg szomorú leszek, ha nemre nyomsz… 😔";
-    img.src = "https://i.imgur.com/8OtYw8D.jpeg";
-    img.style.display = "block";
-
-    const maxX = container.offsetWidth - no.offsetWidth;
-    const maxY = container.offsetHeight - no.offsetHeight;
-
-    no.style.left = Math.random() * maxX + "px";
-    no.style.top = Math.random() * maxY + "px";
+// Zene lejátszása
+function playMusic() {
+    document.getElementById("music").play();
 }
 </script>
 
 </body>
 </html>
-
 
