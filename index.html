@@ -4,15 +4,19 @@
 <meta charset="UTF-8">
 <title>Valentin 💘</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     text-align: center;
-    margin-top: 30px;
+    margin: 0;
+    padding-top: 50px;
 }
 
 img {
-    width: 320px;
+    width: 80%;
+    max-width: 320px;
     border-radius: 15px;
     margin-top: 20px;
 }
@@ -21,6 +25,11 @@ button {
     padding: 12px 28px;
     font-size: 20px;
     margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #ff4081;
+    color: white;
 }
 
 #buttons {
@@ -37,48 +46,132 @@ button {
     margin-top: 10px;
     min-height: 24px;
 }
+
+/* Mobilra optimalizált gombok */
+@media (max-width: 480px) {
+    button {
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+}
 </style>
 </head>
 
-<body onload="playMusic()">
+<body>
 
-<h1>Leszel a Valentinom? 💕</h1>
-
-<div id="buttons">
-    <button id="yesBtn" onclick="yes()">Yes</button>
-    <button id="no">Nem</button>
+<!-- Lépések -->
+<div id="step1">
+    <h1>Készen állsz egy kérdésre? 💭</h1>
+    <button id="step1Yes">Igen</button>
+    <button id="step1No">Nem</button>
 </div>
 
-<p id="sadText"></p>
+<div id="step2" style="display:none">
+    <h1>Biztos, hogy készen állsz? 🤔</h1>
+    <button id="step2Yes">Igen</button>
+    <button id="step2No">Nem</button>
+</div>
 
-<img id="noImage" src="" style="display:none">
+<div id="step3" style="display:none">
+    <h1>Szereted a kis meglepetéseket? 🎁</h1>
+    <button id="step3Yes">Igen</button>
+    <button id="step3No">Nem</button>
+</div>
 
-<audio id="music" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8b2b6b7f3.mp3" type="audio/mpeg">
-</audio>
+<div id="step4" style="display:none">
+    <h1>Készen állsz a nagy kérdésre? 😏</h1>
+    <button id="step4Yes">Igen</button>
+    <button id="step4No">Nem</button>
+</div>
+
+<!-- Fő kérdés -->
+<div id="main" style="display:none">
+    <h1>Leszel a Valentinom? 💕</h1>
+
+    <div id="buttons">
+        <button id="yesBtn" onclick="yes()">Yes</button>
+        <button id="no">Nem</button>
+    </div>
+
+    <p id="sadText"></p>
+    <img id="noImage" src="" style="display:none">
+
+    <audio id="music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8b2b6b7f3.mp3" type="audio/mpeg">
+    </audio>
+</div>
 
 <script>
+const steps = [
+    { yes: "step2", no: "step1NoMsg" },
+    { yes: "step3", no: "step2NoMsg" },
+    { yes: "step4", no: "step3NoMsg" },
+    { yes: "main", no: "step4NoMsg" }
+];
+
+function showStep(current, nextYesId, nextNoId, noMessage) {
+    current.style.display = "none";
+    const nextYes = document.getElementById(nextYesId);
+    const nextNo = document.getElementById(nextNoId);
+    if(nextYes) nextYes.parentElement.style.display = "block";
+    if(nextNo) nextNo.onclick = () => {
+        alert(noMessage);
+    };
+}
+
+// Step 1
+document.getElementById("step1Yes").onclick = () => {
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+};
+document.getElementById("step1No").onclick = () => {
+    alert("Na gyerünk, csak egy gyors kérdés 😉");
+};
+
+// Step 2
+document.getElementById("step2Yes").onclick = () => {
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "block";
+};
+document.getElementById("step2No").onclick = () => {
+    alert("Tényleg? Egy utolsó esély 😏");
+};
+
+// Step 3
+document.getElementById("step3Yes").onclick = () => {
+    document.getElementById("step3").style.display = "none";
+    document.getElementById("step4").style.display = "block";
+};
+document.getElementById("step3No").onclick = () => {
+    alert("Ma egy jó meglepetés vár rád 😜");
+};
+
+// Step 4
+document.getElementById("step4Yes").onclick = () => {
+    document.getElementById("step4").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    playMusic();
+};
+document.getElementById("step4No").onclick = () => {
+    alert("Hát… én várok 😉");
+};
+
+// "Nem" gomb logika
 const no = document.getElementById("no");
 const container = document.getElementById("buttons");
 const text = document.getElementById("sadText");
 const img = document.getElementById("noImage");
 
 let attempts = 0;
-
-// Funkció a "Nem" gombhoz
 function moveNoButton() {
     attempts++;
-
     const maxX = container.offsetWidth - no.offsetWidth;
     const maxY = container.offsetHeight - no.offsetHeight;
-
     no.style.left = Math.random() * maxX + "px";
     no.style.top = Math.random() * maxY + "px";
 
     if (attempts === 1) {
         text.innerText = "Tényleg szomorú leszek, ha nemre nyomsz… 😔";
-        img.src = "https://i.imgur.com/8OtYw8D.jpeg";
-        img.style.display = "block";
     } else if (attempts === 3) {
         text.innerText = "Még mindig a Nem-et próbálod? 😏";
     } else if (attempts === 6) {
@@ -90,15 +183,14 @@ function moveNoButton() {
     }
 }
 
-// Események a "Nem" gombhoz
 no.addEventListener("mouseover", moveNoButton);
 no.addEventListener("touchstart", moveNoButton);
 
-// Funkció a "Yes" gombhoz
+// "Yes" gomb logika
 function yes() {
     document.body.innerHTML = `
         <h1>Ez az 😏💖</h1>
-        <p>Sejtettem… akkor most már nincs visszaút 😉</p>
+        <p>Tudtam, hogy igent mondasz… szóval a masszázs most már kötelező 😎💘</p>
         <img src="https://i.imgur.com/hJ2g6If.jpeg">
     `;
 }
@@ -111,4 +203,3 @@ function playMusic() {
 
 </body>
 </html>
-
