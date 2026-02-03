@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Valentin 💘</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 30px;
+}
+
+img {
+    width: 320px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 28px;
+    font-size: 20px;
+    margin: 10px;
+}
+
+#buttons {
+    position: relative;
+    height: 200px;
+}
+
+#no {
+    position: absolute;
+}
+
+#sadText {
+    font-size: 18px;
+    margin-top: 10px;
+    min-height: 24px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Leszel a Valentinom? 💕</h1>
+
+<div id="buttons">
+    <button id="yesBtn" onclick="yes()">Yes</button>
+    <button id="no" onclick="noClick()">Nem</button>
+</div>
+
+<p id="sadText"></p>
+
+<img id="noImage" src="" style="display:none">
+
+<script>
+function yes() {
+    document.body.innerHTML = `
+        <h1>Ez az 😏💖</h1>
+        <p>Sejtettem… akkor most már nincs visszaút 😉</p>
+        <img src="https://i.imgur.com/hJ2g6If.jpeg">
+    `;
+}
+
+function noClick() {
+    const no = document.getElementById("no");
+    const text = document.getElementById("sadText");
+    const img = document.getElementById("noImage");
+    const container = document.getElementById("buttons");
+
+    text.innerText = "Tényleg szomorú leszek, ha nemre nyomsz… 😔";
+    img.src = "https://i.imgur.com/8OtYw8D.jpeg";
+    img.style.display = "block";
+
+    const maxX = container.offsetWidth - no.offsetWidth;
+    const maxY = container.offsetHeight - no.offsetHeight;
+
+    no.style.left = Math.random() * maxX + "px";
+    no.style.top = Math.random() * maxY + "px";
+}
+</script>
+
+</body>
+</html>
