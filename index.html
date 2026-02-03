@@ -57,6 +57,8 @@ button {
 
 <body>
 
+<p><i>Koppints bárhová a kezdéshez 🎵</i></p>
+
 <!-- Lépések -->
 <div id="step1">
     <h1>Készen állsz egy kérdésre? 💭</h1>
@@ -92,18 +94,20 @@ button {
     </div>
 
     <p id="sadText"></p>
-    <img id="noImage" src="" style="display:none">
 
-    <!-- A te feltöltött zenéd -->
     <audio id="music" loop>
         <source src="mario.mp3" type="audio/mpeg">
     </audio>
 </div>
 
 <script>
-// Zene elem
 const music = document.getElementById("music");
-music.volume = 0.3; // halk háttér
+music.volume = 0.3;
+
+// 🔥 BIZTOS ZENEINDÍTÁS – ELSŐ KATTINTÁSRA
+document.addEventListener("click", () => {
+    music.play().catch(()=>{});
+}, { once: true });
 
 // --- Lépések logika ---
 function showStep(hideId, showId) {
@@ -112,14 +116,8 @@ function showStep(hideId, showId) {
 }
 
 // Step 1
-document.getElementById("step1Yes").onclick = () => {
-    music.play().catch(()=>{}); // biztos mobil interakció
-    showStep("step1","step2");
-};
-document.getElementById("step1No").onclick = () => {
-    alert("Na gyerünk, csak egy gyors kérdés 😉");
-    music.play().catch(()=>{});
-};
+document.getElementById("step1Yes").onclick = () => showStep("step1","step2");
+document.getElementById("step1No").onclick = () => alert("Na gyerünk, csak egy gyors kérdés 😉");
 
 // Step 2
 document.getElementById("step2Yes").onclick = () => showStep("step2","step3");
@@ -133,11 +131,10 @@ document.getElementById("step3No").onclick = () => alert("Ma egy jó meglepetés
 document.getElementById("step4Yes").onclick = () => showStep("step4","main");
 document.getElementById("step4No").onclick = () => alert("Hát… én várok 😉");
 
-// --- "Nem" gomb ugrás logika ---
+// --- "Nem" gomb logika ---
 const no = document.getElementById("no");
 const container = document.getElementById("buttons");
 const text = document.getElementById("sadText");
-const img = document.getElementById("noImage");
 let attempts = 0;
 
 function moveNoButton() {
@@ -147,27 +144,24 @@ function moveNoButton() {
     no.style.left = Math.random() * maxX + "px";
     no.style.top = Math.random() * maxY + "px";
 
-    if (attempts === 1) {
-        text.innerText = "Tényleg szomorú leszek, ha nemre nyomsz… 😔";
-    } else if (attempts === 3) {
-        text.innerText = "Még mindig a Nem-et próbálod? 😏";
-    } else if (attempts === 6) {
-        text.innerText = "Tényleg ellenállsz? 😄";
-    } else if (attempts === 10) {
-        text.innerText = "Én még mindig itt várok... 💖";
-    } else if (attempts >= 15) {
-        text.innerText = "Ez már kitartás 😂 De nem fog sikerülni!";
-    }
+    const messages = [
+        "Tényleg szomorú leszek… 😔",
+        "Még mindig próbálkozol? 😏",
+        "Ez kezd vicces lenni 😄",
+        "Én várok 💖",
+        "Ez már kitartás 😂"
+    ];
+    text.innerText = messages[Math.min(attempts, messages.length - 1)];
 }
 
 no.addEventListener("mouseover", moveNoButton);
 no.addEventListener("touchstart", moveNoButton);
 
-// --- "Yes" gomb logika ---
+// --- YES ---
 document.getElementById("yesBtn").onclick = () => {
     document.body.innerHTML = `
         <h1>Ez az 😏💖</h1>
-        <p>Tudtam, hogy igent mondasz… szóval a masszázs most már kötelező 😎💘</p>
+        <p>Tudtam, hogy igent mondasz… a masszázs kötelező 😎💘</p>
         <img src="https://i.imgur.com/hJ2g6If.jpeg">
     `;
 };
