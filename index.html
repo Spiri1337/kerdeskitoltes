@@ -18,6 +18,11 @@ body {
     padding-top: 50px;
 }
 
+#startHint {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
 #content {
     transition: background-color 0.2s;
 }
@@ -89,13 +94,15 @@ button {
 
 <body>
 
-<p><i>Koppints bárhová a kezdéshez 🎵</i></p>
+<p id="startHint"><i>Koppints bárhová a kezdéshez 🎵</i></p>
 
 <div id="content">
 
 <div id="pre1">
     <h1>Van egy apró dolog… 😌</h1>
-    <button onclick="startMusic(); showStep('pre1','pre2')">Hallgatlak</button>
+    <button onclick="startMusic(); hideHint(); showStep('pre1','pre2')">
+        Hallgatlak
+    </button>
 </div>
 
 <div id="pre2" class="hidden">
@@ -182,8 +189,13 @@ music.volume = 0.3;
 
 function startMusic() {
     if (music.paused) {
+        music.currentTime = 8;
         music.play().catch(()=>{});
     }
+}
+
+function hideHint() {
+    document.getElementById("startHint").style.display = "none";
 }
 
 function showStep(hide, show) {
