@@ -94,15 +94,16 @@ button {
     <p id="sadText"></p>
     <img id="noImage" src="" style="display:none">
 
+    <!-- A te feltöltött zenéd -->
     <audio id="music" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8b2b6b7f3.mp3" type="audio/mpeg">
+        <source src="mario.mp3" type="audio/mpeg">
     </audio>
 </div>
 
 <script>
 // Zene elem
 const music = document.getElementById("music");
-music.volume = 0.3; // halkabb hang
+music.volume = 0.3; // halk háttér
 
 // --- Lépések logika ---
 function showStep(hideId, showId) {
