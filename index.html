@@ -2,120 +2,43 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>Van egy kérdésem 💌</title>
+<title>Valentin kérdés 💌</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+body { font-family: Arial,sans-serif; text-align:center; margin:0; padding:50px; }
+button { padding:12px 28px; font-size:20px; margin:10px; border:none; border-radius:8px; cursor:pointer; background:#ff4081; color:white; }
+.hidden { display:none; }
 
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 50px;
-}
+/* Gomb animáció */
+#yesBtn { animation: pulse 1.8s infinite; }
+@keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.06);}100%{transform:scale(1);} }
 
-#content {
-    transition: background-color 0.2s;
-}
+/* Popup overlay */
+#overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:999; }
+#popup { background:white; padding:25px; border-radius:15px; width:80%; max-width:300px; animation:pop 0.25s ease; }
+#popup p { font-size:18px; margin-bottom:15px; }
+#close { background:#ff4081; padding:8px 16px; border-radius:6px; }
 
-button {
-    padding: 12px 28px;
-    font-size: 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: #ff4081;
-    color: white;
-}
+/* Animáció */
+@keyframes pop { from{transform:scale(0.8);opacity:0;} to{transform:scale(1);opacity:1;} }
 
-.hidden {
-    display: none;
-}
+/* Final oldal */
+img { width:80%; max-width:320px; border-radius:15px; margin-top:20px; }
 
-/* --- POPUP --- */
-#overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
+#buttons { position:relative; height:200px; }
+#no { position:absolute; }
 
-#popup {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    width: 80%;
-    max-width: 300px;
-    animation: pop 0.25s ease;
-}
-
-#popup p {
-    font-size: 18px;
-}
-
-#close {
-    margin-top: 15px;
-    background: #ff4081;
-}
-
-/* anim */
-@keyframes pop {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-/* --- FINAL --- */
-img {
-    width: 80%;
-    max-width: 320px;
-    border-radius: 15px;
-    margin-top: 20px;
-}
-
-#buttons {
-    position: relative;
-    height: 200px;
-}
-
-#no {
-    position: absolute;
-}
-
-#yesBtn {
-    animation: pulse 1.8s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-    100% { transform: scale(1); }
-}
 </style>
 </head>
-
 <body>
 
 <div id="content">
 
-<div id="pre1">
-    <h1>Van egy apró dolog… 😌</h1>
-    <button onclick="showStep('pre1','main')">Hallgatlak</button>
-</div>
-
-<div id="main" class="hidden">
+<div id="main">
     <h1>Leszel a Valentinom? 💕</h1>
-
     <div id="buttons">
         <button id="yesBtn">Yes</button>
-        <button id="no" onclick="showPopup('Na ne már 😄')">Nem</button>
+        <button id="no">Nem</button>
     </div>
 </div>
 
@@ -128,7 +51,7 @@ img {
 
 </div>
 
-<!-- POPUP -->
+<!-- Popup -->
 <div id="overlay" class="hidden">
     <div id="popup">
         <p id="popupText"></p>
@@ -137,38 +60,37 @@ img {
 </div>
 
 <script>
-function showStep(hide, show) {
-    document.getElementById(hide).classList.add("hidden");
-    document.getElementById(show).classList.remove("hidden");
-}
+// lépések (itt csak fő kérdés)
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("no");
+const final = document.getElementById("final");
+const main = document.getElementById("main");
 
-function showPopup(text) {
-    document.getElementById("popupText").innerText = text;
+// Popup funkció
+function showPopup(message){
+    document.getElementById("popupText").innerText = message;
     document.getElementById("overlay").classList.remove("hidden");
 }
+function closePopup(){ document.getElementById("overlay").classList.add("hidden"); }
 
-function closePopup() {
-    document.getElementById("overlay").classList.add("hidden");
-}
-
-const no = document.getElementById("no");
+// Nem gomb mozgatása és popup
 const container = document.getElementById("buttons");
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("click",()=>showPopup("Hopp 😅 Ez nem lesz ilyen könnyű 😏"));
 
-function moveNoButton() {
-    const maxX = container.offsetWidth - no.offsetWidth;
-    const maxY = container.offsetHeight - no.offsetHeight;
-
-    no.style.left = Math.random() * maxX + "px";
-    no.style.top = Math.random() * maxY + "px";
+function moveNo(){
+    const maxX = container.offsetWidth - noBtn.offsetWidth;
+    const maxY = container.offsetHeight - noBtn.offsetHeight;
+    noBtn.style.left = Math.random()*maxX+"px";
+    noBtn.style.top = Math.random()*maxY+"px";
 }
 
-no.addEventListener("mouseenter", moveNoButton);
-no.addEventListener("touchstart", moveNoButton);
-
-document.getElementById("yesBtn").onclick = () => {
-    document.getElementById("main").classList.add("hidden");
-    document.getElementById("final").classList.remove("hidden");
-};
+// Yes gomb
+yesBtn.addEventListener("click",()=>{
+    main.classList.add("hidden");
+    final.classList.remove("hidden");
+});
 </script>
 
 </body>
