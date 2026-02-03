@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Valentin 💘</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -47,7 +46,6 @@ button {
     min-height: 24px;
 }
 
-/* Mobilra optimalizált gombok */
 @media (max-width: 480px) {
     button {
         font-size: 18px;
@@ -89,7 +87,7 @@ button {
     <h1>Leszel a Valentinom? 💕</h1>
 
     <div id="buttons">
-        <button id="yesBtn" onclick="yes()">Yes</button>
+        <button id="yesBtn">Yes</button>
         <button id="no">Nem</button>
     </div>
 
@@ -102,54 +100,45 @@ button {
 </div>
 
 <script>
-const music = document.getElementById("music"); // Zene elem
-music.volume = 0.4; // halkabb háttér
+// Zene elem
+const music = document.getElementById("music");
+music.volume = 0.3; // halkabb hang
+
+// --- Lépések logika ---
+function showStep(hideId, showId) {
+    document.getElementById(hideId).style.display = "none";
+    document.getElementById(showId).style.display = "block";
+}
 
 // Step 1
 document.getElementById("step1Yes").onclick = () => {
-    music.play(); // <-- itt indul a zene az első gombnyomásnál
-    document.getElementById("step1").style.display = "none";
-    document.getElementById("step2").style.display = "block";
+    music.play().catch(()=>{}); // biztos mobil interakció
+    showStep("step1","step2");
 };
 document.getElementById("step1No").onclick = () => {
     alert("Na gyerünk, csak egy gyors kérdés 😉");
-    music.play(); // ha a nem-et nyomja, akkor is induljon a zene
+    music.play().catch(()=>{});
 };
 
 // Step 2
-document.getElementById("step2Yes").onclick = () => {
-    document.getElementById("step2").style.display = "none";
-    document.getElementById("step3").style.display = "block";
-};
-document.getElementById("step2No").onclick = () => {
-    alert("Tényleg? Egy utolsó esély 😏");
-};
+document.getElementById("step2Yes").onclick = () => showStep("step2","step3");
+document.getElementById("step2No").onclick = () => alert("Tényleg? Egy utolsó esély 😏");
 
 // Step 3
-document.getElementById("step3Yes").onclick = () => {
-    document.getElementById("step3").style.display = "none";
-    document.getElementById("step4").style.display = "block";
-};
-document.getElementById("step3No").onclick = () => {
-    alert("Ma egy jó meglepetés vár rád 😜");
-};
+document.getElementById("step3Yes").onclick = () => showStep("step3","step4");
+document.getElementById("step3No").onclick = () => alert("Ma egy jó meglepetés vár rád 😜");
 
 // Step 4
-document.getElementById("step4Yes").onclick = () => {
-    document.getElementById("step4").style.display = "none";
-    document.getElementById("main").style.display = "block";
-};
-document.getElementById("step4No").onclick = () => {
-    alert("Hát… én várok 😉");
-};
+document.getElementById("step4Yes").onclick = () => showStep("step4","main");
+document.getElementById("step4No").onclick = () => alert("Hát… én várok 😉");
 
-// "Nem" gomb logika a fő kérdésnél
+// --- "Nem" gomb ugrás logika ---
 const no = document.getElementById("no");
 const container = document.getElementById("buttons");
 const text = document.getElementById("sadText");
 const img = document.getElementById("noImage");
-
 let attempts = 0;
+
 function moveNoButton() {
     attempts++;
     const maxX = container.offsetWidth - no.offsetWidth;
@@ -173,14 +162,14 @@ function moveNoButton() {
 no.addEventListener("mouseover", moveNoButton);
 no.addEventListener("touchstart", moveNoButton);
 
-// "Yes" gomb logika
-function yes() {
+// --- "Yes" gomb logika ---
+document.getElementById("yesBtn").onclick = () => {
     document.body.innerHTML = `
         <h1>Ez az 😏💖</h1>
         <p>Tudtam, hogy igent mondasz… szóval a masszázs most már kötelező 😎💘</p>
         <img src="https://i.imgur.com/hJ2g6If.jpeg">
     `;
-}
+};
 </script>
 
 </body>
