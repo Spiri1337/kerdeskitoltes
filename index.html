@@ -166,16 +166,4 @@ function yes() {
 
 </body>
 </html>
-function yes() {
-    document.getElementById("main").classList.add("hidden");
 
-    document.getElementById("wrapper").innerHTML = `
-        <h1>Ez az 😌💖</h1>
-        <p>Tudtam, hogy igent mondasz…</p>
-        <p><b>A masszázs kötelező 😎💘</b></p>
-        <img src="https://i.imgur.com/hJ2g6If.jpeg">
-    `;
-
-    // 🔥 ZENE ÚJRAINDÍTÁS (mobil SAFE)
-    music.play().catch(()=>{});
-}
