@@ -102,30 +102,18 @@ button {
 </div>
 
 <script>
-const steps = [
-    { yes: "step2", no: "step1NoMsg" },
-    { yes: "step3", no: "step2NoMsg" },
-    { yes: "step4", no: "step3NoMsg" },
-    { yes: "main", no: "step4NoMsg" }
-];
-
-function showStep(current, nextYesId, nextNoId, noMessage) {
-    current.style.display = "none";
-    const nextYes = document.getElementById(nextYesId);
-    const nextNo = document.getElementById(nextNoId);
-    if(nextYes) nextYes.parentElement.style.display = "block";
-    if(nextNo) nextNo.onclick = () => {
-        alert(noMessage);
-    };
-}
+const music = document.getElementById("music"); // Zene elem
+music.volume = 0.4; // halkabb háttér
 
 // Step 1
 document.getElementById("step1Yes").onclick = () => {
+    music.play(); // <-- itt indul a zene az első gombnyomásnál
     document.getElementById("step1").style.display = "none";
     document.getElementById("step2").style.display = "block";
 };
 document.getElementById("step1No").onclick = () => {
     alert("Na gyerünk, csak egy gyors kérdés 😉");
+    music.play(); // ha a nem-et nyomja, akkor is induljon a zene
 };
 
 // Step 2
@@ -150,13 +138,12 @@ document.getElementById("step3No").onclick = () => {
 document.getElementById("step4Yes").onclick = () => {
     document.getElementById("step4").style.display = "none";
     document.getElementById("main").style.display = "block";
-    playMusic();
 };
 document.getElementById("step4No").onclick = () => {
     alert("Hát… én várok 😉");
 };
 
-// "Nem" gomb logika
+// "Nem" gomb logika a fő kérdésnél
 const no = document.getElementById("no");
 const container = document.getElementById("buttons");
 const text = document.getElementById("sadText");
@@ -193,11 +180,6 @@ function yes() {
         <p>Tudtam, hogy igent mondasz… szóval a masszázs most már kötelező 😎💘</p>
         <img src="https://i.imgur.com/hJ2g6If.jpeg">
     `;
-}
-
-// Zene lejátszása
-function playMusic() {
-    document.getElementById("music").play();
 }
 </script>
 
