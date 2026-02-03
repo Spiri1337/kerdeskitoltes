@@ -6,28 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     padding-top: 50px;
+    margin: 0;
 }
 
-#content {
-    transition: background-color 0.25s;
-}
-
-img {
-    width: 80%;
-    max-width: 320px;
-    border-radius: 15px;
-    margin-top: 20px;
-}
+.step { display: none; }
+.step.active { display: block; }
 
 button {
     padding: 12px 28px;
@@ -40,133 +27,137 @@ button {
     color: white;
 }
 
-.hidden {
-    display: none;
-}
-
-/* IGEN visszajelzés */
-#yesFeedback {
+#feedback {
+    margin-top: 15px;
     font-size: 18px;
-    margin-top: 12px;
+    color: #ff4081;
     opacity: 0;
     transition: opacity 0.25s;
-    color: #ff4081;
+}
+#feedback.show { opacity: 1; }
+
+#buttons {
+    position: relative;
+    height: 180px;
 }
 
-#yesFeedback.show {
-    opacity: 1;
+#no {
+    position: absolute;
 }
 
-/* finom flash */
-.flash {
-    background-color: #fff0f5;
+img {
+    width: 80%;
+    max-width: 320px;
+    border-radius: 15px;
+    margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<p><i>Koppints bárhová a kezdéshez 🎵</i></p>
-
-<div id="content">
-
-<!-- LÉPÉSEK -->
-<div class="step" id="step1">
+<!-- KÉRDÉSEK -->
+<div id="step1" class="step active">
     <h1>Készen állsz egy kérdésre? 💭</h1>
-    <button onclick="yesClick('step1','step2')">Igen</button>
+    <button onclick="nextStep(1)">Igen</button>
 </div>
 
-<div class="step hidden" id="step2">
+<div id="step2" class="step">
     <h1>Szeretsz igent mondani jó dolgokra? 😉</h1>
-    <button onclick="yesClick('step2','step3')">Oké</button>
+    <button onclick="nextStep(2)">Oké</button>
 </div>
 
-<div class="step hidden" id="step3">
+<div id="step3" class="step">
     <h1>Most inkább kíváncsi vagy, mint bizonytalan? 😏</h1>
-    <button onclick="yesClick('step3','step4')">Jöhet</button>
+    <button onclick="nextStep(3)">Jöhet</button>
 </div>
 
-<div class="step hidden" id="step4">
+<div id="step4" class="step">
     <h1>Szereted a kis meglepetéseket? 🎁</h1>
-    <button onclick="yesClick('step4','step5')">Na jó 😌</button>
+    <button onclick="nextStep(4)">Na jó 😌</button>
 </div>
 
-<div class="step hidden" id="step5">
-    <h1>Ha most mosolyogsz, az már majdnem igen, nem? 😌</h1>
-    <button onclick="yesClick('step5','step6', true)">Úgyis igen 😏</button>
+<div id="step5" class="step">
+    <h1>Ha most mosolyogsz, az már majdnem igen 😌</h1>
+    <button onclick="nextStep(5, true)">Úgyis igen 😏</button>
 </div>
 
-<div class="step hidden" id="step6">
+<div id="step6" class="step">
     <h1>Készen állsz a nagy kérdésre? 😏</h1>
-    <button onclick="finalDelay()">Igen</button>
+    <button onclick="finalPause()">Igen</button>
 </div>
 
 <!-- FŐ KÉRDÉS -->
-<div class="step hidden" id="main">
+<div id="main" class="step">
     <h1>Leszel a Valentinom? 💕</h1>
-    <button onclick="showFinal()">Yes 💖</button>
+    <div id="buttons">
+        <button onclick="showFinal()">Yes 💖</button>
+        <button id="no">Nem</button>
+    </div>
+    <p id="sadText"></p>
 </div>
 
-<div id="yesFeedback"></div>
-
-<div class="step hidden" id="final">
+<!-- VÉGE -->
+<div id="final" class="step">
     <h1>Ez az 😏💖</h1>
     <p>Tudtam, hogy igent mondasz…</p>
     <p><b>A masszázs kötelező 😎💘</b></p>
     <img src="https://i.imgur.com/hJ2g6If.jpeg">
 </div>
 
-</div>
+<div id="feedback"></div>
 
 <script>
-const feedbackTexts = [
-    "oké 😌",
-    "jó 😏",
-    "ezt szeretem 💖",
-    "haladunk 😉",
-    "pont így 😌"
-];
+/* IGEN visszajelzés */
+const feedbacks = ["oké 😌", "jó 😏", "ezt szeretem 💖", "haladunk 😉"];
+let f = 0;
 
-let feedbackIndex = 0;
-
-function yesClick(hide, show, stronger = false) {
-    const content = document.getElementById("content");
-    const feedback = document.getElementById("yesFeedback");
-
-    // háttér flash
-    content.classList.add("flash");
-    setTimeout(() => content.classList.remove("flash"), 200);
-
-    // visszajelzés
-    feedback.innerText = feedbackTexts[Math.min(feedbackIndex, feedbackTexts.length - 1)];
-    feedbackIndex++;
-    feedback.classList.add("show");
-
-    setTimeout(() => feedback.classList.remove("show"), 500);
-
-    // léptetés
-    document.getElementById(hide).classList.add("hidden");
-
-    const delay = stronger ? 350 : 120;
+function nextStep(n, slow = false) {
+    showFeedback();
+    document.getElementById("step" + n).classList.remove("active");
     setTimeout(() => {
-        document.getElementById(show).classList.remove("hidden");
-    }, delay);
+        document.getElementById("step" + (n + 1)).classList.add("active");
+    }, slow ? 400 : 150);
 }
 
-function finalDelay() {
-    const content = document.getElementById("content");
-    content.classList.add("flash");
+function showFeedback() {
+    const fb = document.getElementById("feedback");
+    fb.innerText = feedbacks[Math.min(f, feedbacks.length - 1)];
+    f++;
+    fb.classList.add("show");
+    setTimeout(() => fb.classList.remove("show"), 500);
+}
 
+function finalPause() {
+    document.getElementById("step6").classList.remove("active");
     setTimeout(() => {
-        content.classList.remove("flash");
-        document.getElementById("step6").classList.add("hidden");
-        document.getElementById("main").classList.remove("hidden");
-    }, 500); // MINI SZÜNET (8)
+        document.getElementById("main").classList.add("active");
+    }, 500);
 }
 
 function showFinal() {
-    document.getElementById("main").classList.add("hidden");
-    document.getElementById("final").classList.remove("hidden");
+    document.getElementById("main").classList.remove("active");
+    document.getElementById("final").classList.add("active");
+}
+
+/* MENEKÜLŐ NEM */
+const no = document.getElementById("no");
+const container = document.getElementById("buttons");
+const sadText = document.getElementById("sadText");
+let attempts = 0;
+
+no.addEventListener("mouseenter", moveNo);
+no.addEventListener("touchstart", moveNo);
+
+function moveNo() {
+    attempts++;
+    const maxX = container.offsetWidth - no.offsetWidth;
+    const maxY = container.offsetHeight - no.offsetHeight;
+    no.style.left = Math.random() * maxX + "px";
+    no.style.top = Math.random() * maxY + "px";
+
+    const msgs = ["Hopp 😅", "Ez nem ilyen könnyű 😏", "Próbálkozol? 😂", "Én várok 💖"];
+    sadText.innerText = msgs[Math.min(attempts, msgs.length - 1)];
 }
 </script>
 
