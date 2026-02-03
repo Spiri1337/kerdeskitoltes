@@ -150,7 +150,10 @@ music.volume = 0.3;
 
 // első user interaction (iOS miatt)
 document.addEventListener("click", () => {
-    if (music.paused) music.play().catch(()=>{});
+    if (music.paused) {
+        music.currentTime = 8; // ⏱️ 00:08-ról indul
+        music.play().catch(()=>{});
+    }
 }, { once: true });
 
 function showStep(hide, show) {
@@ -205,3 +208,4 @@ document.getElementById("yesBtn").onclick = () => {
 
 </body>
 </html>
+
