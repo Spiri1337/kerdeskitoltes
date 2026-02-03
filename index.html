@@ -60,11 +60,23 @@ button {
     min-height: 24px;
 }
 
+/* INLINE MESSAGE – ALAP (DESKTOP BARÁTI) */
 #inlineMessage {
     font-size: 18px;
-    margin-top: 15px;
+    margin: 15px auto;
     color: #ff4081;
     min-height: 24px;
+    max-width: 90%;
+}
+
+/* MOBILON legyen kártya */
+@media (max-width: 768px) {
+    #inlineMessage {
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
 }
 
 @keyframes pulse {
