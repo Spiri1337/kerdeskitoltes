@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>Valentin 💘</title>
+<title>Van egy kérdésem 💌</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -11,6 +11,7 @@ body {
     text-align: center;
     margin: 0;
     padding-top: 50px;
+    transition: background-color 0.2s;
 }
 
 img {
@@ -44,6 +45,36 @@ button {
     font-size: 18px;
     margin-top: 10px;
     min-height: 24px;
+}
+
+/* 💓 YES gomb pulzál */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+#yesBtn {
+    animation: pulse 1.8s infinite;
+}
+
+/* 😱 Képernyő remegés */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+
+/* Halvány villanás */
+.flash {
+    background-color: #ffe6eb;
 }
 
 @media (max-width: 480px) {
@@ -104,34 +135,30 @@ button {
 const music = document.getElementById("music");
 music.volume = 0.3;
 
-// 🔥 BIZTOS ZENEINDÍTÁS – ELSŐ KATTINTÁSRA
+// 🎵 Zene első kattintásra
 document.addEventListener("click", () => {
     music.play().catch(()=>{});
 }, { once: true });
 
-// --- Lépések logika ---
+// Lépések
 function showStep(hideId, showId) {
     document.getElementById(hideId).style.display = "none";
     document.getElementById(showId).style.display = "block";
 }
 
-// Step 1
-document.getElementById("step1Yes").onclick = () => showStep("step1","step2");
-document.getElementById("step1No").onclick = () => alert("Na gyerünk, csak egy gyors kérdés 😉");
+step1Yes.onclick = () => showStep("step1","step2");
+step1No.onclick = () => alert("Na gyerünk, csak egy gyors kérdés 😉");
 
-// Step 2
-document.getElementById("step2Yes").onclick = () => showStep("step2","step3");
-document.getElementById("step2No").onclick = () => alert("Tényleg? Egy utolsó esély 😏");
+step2Yes.onclick = () => showStep("step2","step3");
+step2No.onclick = () => alert("Tényleg? Egy utolsó esély 😏");
 
-// Step 3
-document.getElementById("step3Yes").onclick = () => showStep("step3","step4");
-document.getElementById("step3No").onclick = () => alert("Ma egy jó meglepetés vár rád 😜");
+step3Yes.onclick = () => showStep("step3","step4");
+step3No.onclick = () => alert("Ma egy jó meglepetés vár rád 😜");
 
-// Step 4
-document.getElementById("step4Yes").onclick = () => showStep("step4","main");
-document.getElementById("step4No").onclick = () => alert("Hát… én várok 😉");
+step4Yes.onclick = () => showStep("step4","main");
+step4No.onclick = () => alert("Hát… én várok 😉");
 
-// --- "Nem" gomb logika ---
+// --- Nem gomb ---
 const no = document.getElementById("no");
 const container = document.getElementById("buttons");
 const text = document.getElementById("sadText");
@@ -139,16 +166,21 @@ let attempts = 0;
 
 function moveNoButton() {
     attempts++;
+
+    // remeg + villan
+    document.body.classList.add("shake","flash");
+    setTimeout(() => document.body.classList.remove("shake","flash"), 300);
+
     const maxX = container.offsetWidth - no.offsetWidth;
     const maxY = container.offsetHeight - no.offsetHeight;
     no.style.left = Math.random() * maxX + "px";
     no.style.top = Math.random() * maxY + "px";
 
     const messages = [
-        "Tényleg szomorú leszek… 😔",
-        "Még mindig próbálkozol? 😏",
-        "Ez kezd vicces lenni 😄",
-        "Én várok 💖",
+        "Hopp 😅",
+        "Ez nem lesz ilyen könnyű 😏",
+        "Próbálkozol? 😄",
+        "Én még várok 💖",
         "Ez már kitartás 😂"
     ];
     text.innerText = messages[Math.min(attempts, messages.length - 1)];
@@ -157,8 +189,8 @@ function moveNoButton() {
 no.addEventListener("mouseover", moveNoButton);
 no.addEventListener("touchstart", moveNoButton);
 
-// --- YES ---
-document.getElementById("yesBtn").onclick = () => {
+// YES
+yesBtn.onclick = () => {
     document.body.innerHTML = `
         <h1>Ez az 😏💖</h1>
         <p>Tudtam, hogy igent mondasz… a masszázs kötelező 😎💘</p>
