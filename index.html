@@ -55,7 +55,7 @@ button {
     min-height: 24px;
 }
 
-/* 💓 YES pulzál */
+/* YES pulzál */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.06); }
@@ -65,7 +65,7 @@ button {
     animation: pulse 1.8s infinite;
 }
 
-/* 😱 Remegetés CSAK A CONTENTEN */
+/* Remegetés */
 @keyframes shake {
     0% { transform: translateX(0); }
     20% { transform: translateX(-6px); }
@@ -139,8 +139,8 @@ button {
 
 </div>
 
-<!-- 🎵 AUDIO – VÉGLEGES, NEM RESETEL -->
-<audio id="music" loop playsinline>
+<!-- 🎵 AUDIO -->
+<audio id="music" loop playsinline preload="auto">
     <source src="mario.mp3" type="audio/mpeg">
 </audio>
 
@@ -148,11 +148,22 @@ button {
 const music = document.getElementById("music");
 music.volume = 0.3;
 
-// első user interaction (iOS miatt)
+let started = false;
+
+// ELSŐ user interaction – BIZTOS 00:08
 document.addEventListener("click", () => {
-    if (music.paused) {
-        music.currentTime = 8; // ⏱️ 00:08-ról indul
+    if (started) return;
+    started = true;
+
+    const startMusic = () => {
+        music.currentTime = 8;
         music.play().catch(()=>{});
+    };
+
+    if (music.readyState >= 1) {
+        startMusic();
+    } else {
+        music.addEventListener("loadedmetadata", startMusic, { once: true });
     }
 }, { once: true });
 
@@ -195,17 +206,14 @@ function moveNoButton() {
 no.addEventListener("mouseenter", moveNoButton);
 no.addEventListener("touchstart", moveNoButton);
 
-// YES gomb – NEM indítja újra a zenét
+// YES – nem resetel
 document.getElementById("yesBtn").onclick = () => {
     document.getElementById("main").classList.add("hidden");
     document.getElementById("final").classList.remove("hidden");
 
-    if (music.paused) {
-        music.play().catch(()=>{});
-    }
+    if (music.paused) music.play().catch(()=>{});
 };
 </script>
 
 </body>
 </html>
-
